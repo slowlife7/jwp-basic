@@ -22,6 +22,7 @@ public class ProfileController extends HttpServlet {
         if (user == null) {
             throw new NullPointerException("사용자를 찾을 수 없습니다.");
         }
+
         req.setAttribute("user", user);
         RequestDispatcher rd = req.getRequestDispatcher("/user/profile.jsp");
         rd.forward(req, resp);

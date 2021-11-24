@@ -10,15 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import core.db.DataBase;
+import next.support.context.ContextLoaderListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@WebServlet("")
-public class HomeController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+public class HomeController implements Controller {
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("users", DataBase.findAll());
-        RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-        rd.forward(req, resp);
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        request.setAttribute("users", DataBase.findAll());
+        return "/index.jsp";
     }
 }
