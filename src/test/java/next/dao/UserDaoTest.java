@@ -1,8 +1,10 @@
 package next.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +14,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import core.jdbc.ConnectionManager;
 import next.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 public class UserDaoTest {
     @Before
@@ -33,12 +36,23 @@ public class UserDaoTest {
         userDao.update(expected);
         actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
-    }
+    }*/
 
     @Test
+    @Transactional
     public void findAll() throws Exception {
         UserDao userDao = new UserDao();
+        User expected = new User("test1", "12341", "haha1", "javajigi@email.com");
+        userDao.insert(expected);
+
+        User expected1 = new User("test2", "12341", "haha1", "javajigi@email.com");
+        userDao.insert(expected1);
+
         List<User> users = userDao.findAll();
-        assertEquals(1, users.size());
-    }*/
+
+        Optional<User> find = users.stream().filter(user -> user.getUserId().equals("test1")).findAny();
+        assertTrue(find.isPresent());
+
+        assertEquals(3, users.size());
+    }
 }
