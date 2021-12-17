@@ -11,7 +11,7 @@ import core.jdbc.ConnectionManager;
 import next.model.User;
 
 public class UserDao {
-    public void insert(User user) throws SQLException {
+    public void insert(User user) {
         PreparedStatementSetter setter = pstmt -> {
             pstmt.setString(1, user.getUserId());
             pstmt.setString(2, user.getPassword());
@@ -22,7 +22,7 @@ public class UserDao {
         insertJdbcTemplate.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", setter);
     }
 
-    public void update(User user) throws SQLException {
+    public void update(User user) {
         PreparedStatementSetter setter = pstmt -> {
             pstmt.setString(1, user.getPassword());
             pstmt.setString(2, user.getName());
@@ -34,36 +34,20 @@ public class UserDao {
     }
 
     public List<User> findAll() throws SQLException {
-        RowMapper mapper = new RowMapper() {
-            @Override
-            public Object mapRow(ResultSet resultSet) throws SQLException {
-                if (resultSet.next()) {
-                    return new User(resultSet.getString("userId"), resultSet.getString("password"), resultSet.getString("name"),
-                            resultSet.getString("email"));
-                }
-                return null;
-            }
-        };
-
+        PreparedStatementSetter setter = pstmt -> {};
+        RowMapper<User> mapper = resultSet -> new User(resultSet.getString("userId"), resultSet.getString("password"), resultSet.getString("name"),
+                resultSet.getString("email"));
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        return jdbcTemplate.query("SELECT userId, password, name, email FROM USERS", mapper);
+        return jdbcTemplate.query("SELECT userId, password, name, email FROM USERS", setter, mapper);
     }
 
     public User findByUserId(String userId) throws SQLException {
         PreparedStatementSetter setter = pstmt -> {
             pstmt.setString(1, userId);
         };
-        RowMapper mapper = new RowMapper() {
-            @Override
-            public Object mapRow(ResultSet resultSet) throws SQLException {
-                if (resultSet.next()) {
-                    return new User(resultSet.getString("userId"), resultSet.getString("password"), resultSet.getString("name"),
-                            resultSet.getString("email"));
-                }
-                return null;
-            }
-        };
+        RowMapper<User> mapper = resultSet -> new User(resultSet.getString("userId"), resultSet.getString("password"), resultSet.getString("name"),
+                resultSet.getString("email"));
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        return (User)jdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?",setter, mapper);
+        return jdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?",setter, mapper);
     }
 }
