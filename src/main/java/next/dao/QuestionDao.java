@@ -4,6 +4,7 @@ import core.jdbc.JdbcTemplate;
 import core.jdbc.RowMapper;
 import next.model.Question;
 import next.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,5 +34,18 @@ public class QuestionDao {
         String sql = "INSERT INTO QUESTIONS(writer, title, contents, createdDate, countOfAnswer) VALUES ( ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, question.getWriter(), question.getTitle(),
                 question.getContents(), question.getCreatedDate(), question.getCountOfAnswer());
+    }
+
+    public void updateCountOfAnswer(final long questionId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "UPDATE QUESTIONS set countOfAnswer =  countOfAnswer + 1 WHERE questionId = ?";
+        jdbcTemplate.update(sql, questionId);
+    }
+
+    public void update(Question question) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "UPDATE QUESTIONS set writer = ?, title = ?, contents = ? , countOfAnswer = ? WHERE questionId = ?";
+        jdbcTemplate.update(sql, question.getWriter(), question.getTitle(),
+                question.getContents(), question.getCountOfAnswer(), question.getQuestionId());
     }
 }

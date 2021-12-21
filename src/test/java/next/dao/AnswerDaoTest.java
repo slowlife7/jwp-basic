@@ -30,4 +30,13 @@ public class AnswerDaoTest {
 
         Assert.assertEquals(answers.size(), 2);
     }
+
+    @Test
+    @Transactional
+    public void updateAnswerByQuestionId() {
+        long questionId = 7L;
+        AnswerDao answerDao = new AnswerDao();
+        long count = answerDao.countByQuestionId(questionId);
+        Assert.assertEquals(count, 2);
+    }
 }

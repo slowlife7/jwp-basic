@@ -11,7 +11,7 @@ public class AnswerDao {
 
     public void insert(Answer answer) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        String sql = "INSERT INTO ANSWERS VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ANSWERS(writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, answer.getWriter(), answer.getContents(), answer.getCreatedDate(),
                 answer.getQuestionId());
     }
@@ -24,6 +24,15 @@ public class AnswerDao {
                 rs.getString("contents"), rs.getDate("createdDate"), rs.getLong("questionId"));
 
         return jdbcTemplate.queryForObject(sql, rm, answerId);
+    }
+
+    public long countByQuestionId(final long questionId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "SELECT answerId FROM ANSWERS WHERE questionId=?";
+
+        RowMapper<Integer> rm = rs -> rs.getInt("answerId");
+
+        return jdbcTemplate.query(sql, rm, questionId).size();
     }
 
     public List<Answer> findByQuestionId(long questionId) {

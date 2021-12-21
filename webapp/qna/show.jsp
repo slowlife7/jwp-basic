@@ -85,11 +85,11 @@
                                   </div>
                               </article>
                           </c:forEach>
-                          <form class="submit-write">
+                          <form class="submit-write" action="/qna/answer?questionId=${question.questionId}" method="POST">
                               <div class="form-group" style="padding:14px;">
-                                  <textarea class="form-control" placeholder="Update your status"></textarea>
+                                  <textarea name="contents" class="form-control" placeholder="Update your status"></textarea>
                               </div>
-                              <button class="btn btn-success pull-right" type="button">Post</button>
+                              <button class="btn btn-success pull-right" type="submit">Post</button>
                               <div class="clearfix" />
                           </form>
                       </div>
@@ -104,5 +104,5 @@
 <script src="../js/jquery-2.2.0.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/scripts.js"></script>
-	</body>
+    </body>
 </html>
