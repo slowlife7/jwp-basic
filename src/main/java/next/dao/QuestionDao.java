@@ -21,7 +21,7 @@ public class QuestionDao {
     }
     public List<Question> findAll() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS";
+        String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS ORDER BY createdDate DESC";
 
         RowMapper<Question> rm = rs -> new Question(rs.getLong("questionId"), rs.getString("writer"), rs.getString("title"),
                 rs.getString("contents"), rs.getDate("createdDate"), rs.getInt("countOfAnswer"));
@@ -30,8 +30,8 @@ public class QuestionDao {
 
     public void insert(Question question) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        String sql = "INSERT INTO QUESTIONS VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, question.getQuestionId(), question.getWriter(), question.getTitle(),
+        String sql = "INSERT INTO QUESTIONS(writer, title, contents, createdDate, countOfAnswer) VALUES ( ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, question.getWriter(), question.getTitle(),
                 question.getContents(), question.getCreatedDate(), question.getCountOfAnswer());
     }
 }

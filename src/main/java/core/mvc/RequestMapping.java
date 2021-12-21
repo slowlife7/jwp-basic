@@ -24,6 +24,7 @@ public class RequestMapping {
         mappings.put("/users/update", new UpdateUserController());
 
         mappings.put("/qna/form", new ForwardController("/qna/form.jsp"));
+        mappings.put("/qna/question", new QnaQuestionController());
         mappings.put("/qna/show", new QnaShowController());
         logger.info("Initialized Request Mapping!");
     }
